@@ -22,7 +22,7 @@ Regressors_list, nModalities = _compute_regressors(regressors_mode, subj)
 nRegressors = nModalities - 1 # We do not take into account the constant regressor for the LOCO
 
 ## Load beta estimates for the given subject
-beta_estimates = nibabel.load(os.path.join(mDir, 'data', f'subj{subj:02d}', 'fmri_estimates', f'visual_conditions_across_all_concatenated_runs_z_scores.nii'))
+beta_estimates = nibabel.load(os.path.join(mDir, 'data', f'subj{subj:02d}', 'fmri_estimates', f'visual_conditions_across_all_concatenated_runs_z_scores.nii.gz'))
 betas = beta_estimates.get_fdata()
 
 Explained_Variance, Weights = [], []
