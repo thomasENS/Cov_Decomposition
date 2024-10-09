@@ -1,8 +1,8 @@
 ## Root directory 
-mDir = '/neurospin/unicog/protocols/IRMf/ObjectNumberComplexity_ChapalainEger_2022/Code_Paper/Cov_Decomposition'
+mDir = '/neurospin/unicog/protocols/IRMf/ObjectNumberComplexity_ChapalainEger_2022/git/Cov_Decomposition'
 
 ## Subject ID
-subj = 11
+subj = 7
 
 ## Candidate Covariances ID to use to decompose the target Covariance matrix
-regressors_mode = 'num_obj_bg'
+regressors_mode = 'lls'

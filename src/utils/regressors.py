@@ -2,7 +2,7 @@ import numpy as np
 import os
 
 from args.constants import (nObjects, nBackgrounds, Numerosity, nNumerosity, nConditions)
-
+from args.args import (mDir)
 
 def _compute_regressors(regressors_mode, subj=10):
     '''
@@ -42,7 +42,7 @@ def _compute_regressors(regressors_mode, subj=10):
         LLS = ['Mean_Luminance', 'Std_Luminance', 'Agg_Fourier_Mag', 'Energy_High_SF', 'Texture_Similarity', 'Image_Complexity']
         Modalities  = ['Numerosity'] + LLS; nModalities = len(Modalities)
 
-        uDir = os.path.join(mDir, 'data', f'subj{subj}', 'statistics')
+        uDir = os.path.join(mDir, 'data', f'subj{subj:02d}', 'statistics')
 
         ## One regressor for numerosity and each low-level statistics (continuous-valued)
         Regressors = {Modality:np.zeros((nConditions, nConditions)) for Modality in Modalities}
@@ -56,6 +56,19 @@ def _compute_regressors(regressors_mode, subj=10):
             regressor_vector -= np.mean(regressor_vector)
 
             Regressors[Modalities[i]] = regressor_vector @ regressor_vector.T
+
+    elif regressors_mode == 'cnn':
+
+        Modalities = ['Numerosity', 'AlexNet', 'ResNet50', 'VGG16']; nModalities = len(Modalities)
+
+        uDir = os.path.join(mDir, 'data', f'subj{subj:02d}', 'statistics')
+
+        ## One regressor for numerosity and each low-level statistics (continuous-valued)
+        Regressors = {Modality:np.zeros((nConditions, nConditions)) for Modality in Modalities}
+
+        for i in range(1, nModalities):
+
+            Regressors[Modalities[i]] = np.load(os.path.join(uDir, f'{Modalities[i]}_Conv5_Similarity_Matrix.npy'))
 
     ## Creating the numerosity regressor "similarity matrix"
     numerosity_vector  = np.array([np.log(Numerosity[idx_num]) for idx_num in range(nNumerosity) for idx_obj in range(nObjects) for idx_bg in range(nBackgrounds)]).reshape(-1, 1)

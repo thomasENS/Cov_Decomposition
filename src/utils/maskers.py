@@ -1,5 +1,7 @@
 import nibabel, os
 
+from args.args import (mDir)
+
 ## Useful Constants for Individual Subject's Brain Masking
 hemispheres = ['left', 'right']
 
@@ -39,9 +41,9 @@ def _load_roi_mask(hemi, roi, subj=2):
     assert roi in ROIs, f'Given roi is not part of the Wang atlas, valid input are: {", ".join(ROIs)}'
 
 
-    sDir = f'/neurospin/unicog/protocols/IRMf/ObjectNumberComplexity_ChapalainEger_2022/Imaging_Data/mri_surface/sub{subj:02d}/mask_func'
+    sDir = os.path.join(mDir, 'data', f'subj{subj:02d}', 'mask_func')
 
-    return nibabel.load(os.path.join(sDir, f'{hemi[0]}h.wang2015atlas_{roi}.nii')).get_fdata().astype(bool)
+    return nibabel.load(os.path.join(sDir, f'{hemi[0]}h.wang2015atlas_{roi}.nii.gz')).get_fdata().astype(bool)
 
 def _extract_mask(array, mask):
     '''
@@ -68,15 +70,15 @@ def _load_stream_mask(stream, subj=2):
     assert stream in Streams.keys(), f'Given roi is not part of the Wang atlas, valid input are: {", ".join(Streams.keys())}'
 
 
-    sDir = f'/neurospin/unicog/protocols/IRMf/ObjectNumberComplexity_ChapalainEger_2022/Imaging_Data/mri_surface/sub{subj:02d}/mask_func'
+    sDir = os.path.join(mDir, 'data', f'subj{subj:02d}', 'mask_func')
 
     mask = None
     for hemi in hemispheres:
         for roi in Streams[stream]:
             
             if mask is None:
-                mask  = nibabel.load(os.path.join(sDir, f'{hemi[0]}h.wang2015atlas_{roi}.nii')).get_fdata()
+                mask  = nibabel.load(os.path.join(sDir, f'{hemi[0]}h.wang2015atlas_{roi}.nii.gz')).get_fdata()
             else:
-                mask += nibabel.load(os.path.join(sDir, f'{hemi[0]}h.wang2015atlas_{roi}.nii')).get_fdata()
+                mask += nibabel.load(os.path.join(sDir, f'{hemi[0]}h.wang2015atlas_{roi}.nii.gz')).get_fdata()
 
     return mask.astype(bool)

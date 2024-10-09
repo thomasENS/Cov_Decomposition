@@ -15,7 +15,9 @@ from utils.minimization import (objective_function, constraints, matrix_r2_score
 from args.constants import (nConditions)
 from args.args import (mDir, subj, regressors_mode)
 
+
 rDir = os.path.join(mDir, 'derivatives', f'subj{subj:02d}')
+_check_folder(rDir)
 
 # %% Creating the Regressors Matrices : Either from super-ordinate categories (Num, Obj, Bg) or Load them from the LLS Regressor Matrices
 Regressors_list, nModalities = _compute_regressors(regressors_mode, subj)
